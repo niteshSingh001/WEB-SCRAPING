@@ -22,7 +22,7 @@ app.post("/scrape", async (req, res) => {
     const maxWords = 100;
     const words = scrapedText.split(" ");
     const truncatedSummary = words.slice(0, maxWords).join(" ");
-    console.log("scrapedText", scrapedText);
+    // console.log("scrapedText", scrapedText);
     res.status(201).json({ summary: truncatedSummary });
   } catch (error) {
     // console.log("error", error);

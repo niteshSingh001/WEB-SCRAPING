@@ -18,45 +18,42 @@ app.post("/scrape", async (req, res) => {
   await page.goto(url, { waitUntil: "domcontentloaded" });
   const scrapedText = await page.evaluate(() => document.body.innerText);
   await browser.close();
+  const maxWords = 100;
+  const words = scrapedText.split(" ");
+  const truncatedSummary = words.slice(0, maxWords).join(" ");
+  // console.log(truncatedSummary);
+
+  const apiKey = process.env.API_KEY;
+
+  const requestData = {
+    language: "auto",
+    text: truncatedSummary,
+    min_length: 5,
+    max_length: 100,
+  };
+
   try {
-    const maxWords = 100;
-    const words = scrapedText.split(" ");
-    const truncatedSummary = words.slice(0, maxWords).join(" ");
-    // console.log("scrapedText", scrapedText);
-    res.status(201).json({ summary: truncatedSummary });
+    const response = await axios.post(
+      "https://portal.ayfie.com/api/summarize",
+      requestData,
+      {
+        headers: {
+          "X-API-KEY": apiKey,
+          accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    const summary = response.data.result;
+
+    // console.log("inside try response", summary);
+    res.status(201).json({ summary });
   } catch (error) {
-    // console.log("error", error);
-    res.status(404).json(error);
+    // console.error("inside Error:", error.message);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
-
-//   try {
-//     const apiKey = process.env.API_KEY;
-//     const chatGPTResponse = await axios.post(
-//       "https://api.openai.com/v1/chat/completions",
-//       {
-//         model: "gpt-3.5-turbo",
-//         messages: [
-//           { role: "system", content: "You are a helpful assistant." },
-//           { role: "user", content: scrapedText },
-//         ],
-//       },
-//       {
-//         headers: {
-//           "Content-Type": "application/json",
-//           Authorization: `Bearer ${apiKey}`,
-//         },
-//       }
-//     );
-
-//     const summary = chatGPTResponse.data.choices[0].message.content;
-
-//     res.status(201).json({ summary });
-//   } catch (error) {
-//     console.log("ChatGPT API Response:", chatGPTResponse.data);
-//     res.status(404).json(error);
-//   }
-// });
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

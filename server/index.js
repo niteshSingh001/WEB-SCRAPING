@@ -15,7 +15,7 @@ app.post("/scrape", async (req, res) => {
 
   const browser = await puppeteer.launch({
     headless: "new",
-    executablePath: "/usr/bin/google-chrome",
+    executablePath: "/usr/bin/google-chrome-stable",
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
   });
   const page = await browser.newPage();

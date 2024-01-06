@@ -27,9 +27,15 @@ app.post("/scrape", async (req, res) => {
         : puppeteer.executablePath(),
   });
   const page = await browser.newPage();
-  await page.goto(url, { waitUntil: "domcontentloaded" });
-  const scrapedText = await page.evaluate(() => document.body.innerText);
-  await browser.close();
+  try {
+    await page.goto(url, { waitUntil: "domcontentloaded" });
+    const scrapedText = await page.evaluate(() => document.body.innerText);
+  } catch (error) {
+    console.error("in error:", error);
+  } finally {
+    await browser.close();
+  }
+
   const maxWords = 100;
   const words = scrapedText.split(" ");
   const truncatedSummary = words.slice(0, maxWords).join(" ");

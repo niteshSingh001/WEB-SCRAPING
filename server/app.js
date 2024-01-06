@@ -1,7 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const axios = require("axios");
-const puppeteer = require("puppeteer");
+const puppeteer = require("puppeteer-core");
 const cors = require("cors");
 
 const app = express();
@@ -13,7 +13,10 @@ app.use(cors());
 app.post("/scrape", async (req, res) => {
   const { url } = req.body;
 
-  const browser = await puppeteer.launch({ headless: "new" });
+  const browser = await puppeteer.launch({
+    headless: "new",
+    executablePath: "/usr/bin/google-chrome",
+  });
   const page = await browser.newPage();
   await page.goto(url, { waitUntil: "domcontentloaded" });
   const scrapedText = await page.evaluate(() => document.body.innerText);

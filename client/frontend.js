@@ -11,4 +11,5 @@ async function fetchSummary() {
 
   const data = await response.json();
   document.getElementById("summaryContainer").innerText = data.summary;
+  document.getElementById("urlInput").value = "";
 }

@@ -1,0 +1,5 @@
+services:
+  - type: web
+    name: assignment-image
+    buildCommand: docker build -t assignment-image -f Dockerfile .
+    startCommand: docker run -p 10000:10000 assignment-image

@@ -12,7 +12,7 @@ app.use(cors());
 
 app.post("/scrape", async (req, res) => {
   const { url } = req.body;
-
+  let scrapedText;
   const browser = await puppeteer.launch({
     args: [
       "--disable-setuid-sandbox",
@@ -29,20 +29,16 @@ app.post("/scrape", async (req, res) => {
   const page = await browser.newPage();
   try {
     await page.goto(url, { waitUntil: "domcontentloaded" });
-    const scrapedText = await page.evaluate(() => document.body.innerText);
+    scrapedText = await page.evaluate(() => document.body.innerText);
   } catch (error) {
     console.error("in error:", error);
   } finally {
     await browser.close();
   }
-
   const maxWords = 100;
   const words = scrapedText.split(" ");
   const truncatedSummary = words.slice(0, maxWords).join(" ");
-  // console.log(truncatedSummary);
-
   const apiKey = process.env.API_KEY;
-
   const requestData = {
     language: "auto",
     text: truncatedSummary,

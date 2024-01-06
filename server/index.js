@@ -14,12 +14,7 @@ app.post("/scrape", async (req, res) => {
   const { url } = req.body;
   let scrapedText;
   const browser = await puppeteer.launch({
-    args: [
-      "--disable-setuid-sandbox",
-      "--no-sandbox",
-      "--single-process",
-      "--no-zygote",
-    ],
+    args: ["--disable-setuid-sandbox", "--no-sandbox", "--no-zygote"],
     headless: "new",
     executablePath:
       process.env.NODE_ENV === "production"

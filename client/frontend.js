@@ -1,7 +1,7 @@
 async function fetchSummary() {
   const urlInput = document.getElementById("urlInput").value;
 
-  const response = await fetch("http://localhost:3000/scrape", {
+  const response = await fetch("https://summarize-eqj8.onrender.com/scrape", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

@@ -26,10 +26,16 @@ app.post("/scrape", async (req, res) => {
         ? process.env.PUPPETEER_EXECUTABLE_PATH
         : puppeteer.executablePath(),
   });
+
   const page = await browser.newPage();
+
   try {
     await page.goto(url, { waitUntil: "domcontentloaded" });
-    scrapedText = await page.evaluate(() => document.body.innerText);
+    scrapedText = await page.evaluate(() => {
+      return new Promise((resolve) => {
+        resolve(document.body.innerText);
+      });
+    });
   } catch (error) {
     console.error("in error:", error);
   } finally {

@@ -15,7 +15,6 @@ app.post("/scrape", async (req, res) => {
 
   const browser = await puppeteer.launch({
     headless: "new",
-    executablePath: "/usr/bin/google-chrome",
   });
   const page = await browser.newPage();
   await page.goto(url, { waitUntil: "domcontentloaded" });

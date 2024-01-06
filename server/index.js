@@ -1,7 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const axios = require("axios");
-const puppeteer = require("puppeteer-core");
+const puppeteer = require("puppeteer");
 const cors = require("cors");
 
 const app = express();

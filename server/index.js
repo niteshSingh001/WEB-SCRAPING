@@ -36,7 +36,7 @@ app.post("/scrape", async (req, res) => {
   } finally {
     await browser.close();
   }
-  const maxWords = 100;
+  const maxWords = 200;
   const words = scrapedText.split(" ");
   const truncatedSummary = words.slice(0, maxWords).join(" ");
   const apiKey = process.env.API_KEY;
